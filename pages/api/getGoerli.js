@@ -16,7 +16,7 @@ export default async function sendEth(req, res) {
         const walletAddress = req.body.address
         const txn = await Wallet.sendTransaction({
             to: walletAddress,
-            value: ethers.utils.parseEther("0.000001"),
+            value: ethers.utils.parseEther("0.0001"),
         })
         const receipt = await txn.wait(1)
 

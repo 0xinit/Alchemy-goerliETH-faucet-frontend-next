@@ -14,10 +14,15 @@ const Form = () => {
         const validAddress = ethers.utils.isAddress(_address)
         if (validAddress) {
             setShowSpinner(true)
-            await sendFund(_address)
-            setShowSpinner(false)
-            setShowConfetti(true)
-            setAddress("")
+            try {
+                await sendFund(_address)
+                setShowSpinner(false)
+                setShowConfetti(true)
+                setAddress("")
+            } catch (error) {
+                setShowSpinner(false)
+                setAddress("")
+            }
         } else {
             toast.error("Invalid Address")
         }
@@ -49,7 +54,7 @@ const Form = () => {
                 isLoading={showSpinner}
                 loadingText="Pending"
             >
-                Send Me 0.1 ETH
+                Send Me 0.0001 ETH
             </Button>
 
             {showConfetti && <Confetti />}
