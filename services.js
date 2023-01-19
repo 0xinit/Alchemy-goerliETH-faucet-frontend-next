@@ -1,3 +1,5 @@
+import { toast } from "react-hot-toast"
+
 export const checkEarlyAccessNft = async (address) => {
     try {
         const response = await fetch("api/getNftValidation", {
@@ -6,21 +8,20 @@ export const checkEarlyAccessNft = async (address) => {
             headers: {
                 "Content-Type": "application/json",
             },
-        });
+        })
         if (response.status === 200) {
-            return true;
+            return true
         } else {
-            return false;
+            return false
         }
     } catch (err) {
-        console.error(err);
+        console.error(err)
     }
-};
+}
 
 export const sendFund = async (address) => {
-    console.log(address);
-    alert("Waiting for Confirmation");
-
+    console.log(address)
+    toast("Request Initiated!", { icon: "🚀" })
     try {
         const response = await fetch("api/getGoerli", {
             method: "POST",
@@ -28,15 +29,16 @@ export const sendFund = async (address) => {
             headers: {
                 "Content-Type": "application/json",
             },
-        });
+        })
 
         if (response.status === 200) {
-            alert("Transaction succesful!");
+            const data = await response.json()
+            toast.success(data.message, { duration: 100000 })
         } else {
-            alert("Something went wrong in api! ");
+            toast.error("Something went wrong in api!")
         }
     } catch (err) {
-        console.error(err);
-        alert("Something went wrong in api! ");
+        console.error(err)
+        toast.error("Something went wrong in api!")
     }
-};
+}
