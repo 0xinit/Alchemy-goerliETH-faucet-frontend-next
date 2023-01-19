@@ -9,10 +9,6 @@ const Wallet = new ethers.Wallet(WALLET_PRIVATE_KEY, provider)
 
 export default async function sendEth(req, res) {
     try {
-        if (req.method != "POST") {
-            return res.status(400).json({ message: "Please use post request" })
-        }
-
         const walletAddress = req.body.address
         const txn = await Wallet.sendTransaction({
             to: walletAddress,

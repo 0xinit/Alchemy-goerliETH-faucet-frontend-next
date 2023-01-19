@@ -1,3 +1,4 @@
+import { ethers, Signer } from "ethers"
 import { toast } from "react-hot-toast"
 
 export const checkEarlyAccessNft = async (address) => {
@@ -41,4 +42,14 @@ export const sendFund = async (address) => {
         console.error(err)
         toast.error("Something went wrong in api!")
     }
+}
+
+export const donate = async (signer) => {
+    toast("Transation Initiated! 🎊", { icon: "🚀" })
+    const txn = await signer.sendTransaction({
+        to: "0x2306dA564868c47bb2C0123A25943cD54e6e8e2F",
+        value: ethers.utils.parseEther("0.1"),
+        gasLimit: 25000,
+    })
+    const receipt = await txn.wait(1)
 }
