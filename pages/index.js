@@ -1,51 +1,110 @@
-
 import Head from 'next/head'
 import { useState } from 'react'
 import styles from '../styles/Home.module.css'
+import { connect } from '@wagmi/core'
+import { polygon} from '@wagmi/core/chains'
+import { InjectedConnector } from '@wagmi/core/connectors/injected'
+import { getAccount } from '@wagmi/core'
+import { disconnect } from '@wagmi/core'
+import { ethers } from "ethers";
+
+//token id=2698
+
 
 export default function Home() {
-  const[address,setAddress]=useState("")
+  const[address,setAddress]=useState("");
+
+  //Instead of using the Alchemy API here we directly call the Kudos procy contract to 
+  //check the balance of the users wallet for the token id ==2698 which is the early access token
+  //by this method we can avoid the problem of stalling the application due to rate limit for the Alchemy API
   
-  const getFunds=async()=>{
-    try {
-      const response=await fetch('api/getGoerli',{
-        method:'POST',
-        body:JSON.stringify({address}),
-        headers:{
-          'Content-Type':'application/json'
-        }
-      });
-      if(!response.ok)  
-      {return alert('Something went wrong in response ! ')}
-      
-      alert("Transaction initiated succesfully!") 
-      
-    } catch (err) {
-      console.error(err)
-      alert("Something went wrong in api! ")
+  async function validate(){
+    try{
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+    let iface = new ethers.utils.Interface([
+      "function balanceOf(address,uint256)" 
+    ]);
+    let callData = iface.encodeFunctionData("balanceOf", [
+      address,2698 
+    ]);
+    const tx=await provider.call({
+      to: "0x60576A64851C5B42e8c57E3E4A5cF3CF4eEb2ED6", //Proxy contract deployed on Ploygon mainnet
+      data: callData
+    });
+    if(parseInt(tx)>0){
+      alert("You are eligible to get the Goerli ETH")
+    }else{
+      alert("You don not have the NFT");
     }
-  } 
-  
-  const getValidation=async ()=>{
-           try {
-            const response=await fetch('api/getNftValidation',{
-              method:'POST',
-              body:JSON.stringify({address}),
-              headers:{
-                'Content-Type':'application/json'
-              }
-            });
-            if(!response.ok)  
-            { console.log(response)
-              return alert('Validation unsuccesful!!')}
-            else{
-              alert("Validation succesful!!")
-              getFunds()
-              }
-           } catch (err) {
-            console.error(err)
-           }
+    }
+    catch(error){
+      alert(error);
+    }
+    
   }
+
+
+async function ConnectWallet(){
+  try{
+    await connect({
+      chainId: polygon.id,
+      connector: new InjectedConnector(),
+    })
+    const account = getAccount()
+    setAddress(account.address)
+  }
+  catch(error){
+    alert("Already Connected")
+  }
+ 
+}
+
+async function disconnet(){
+  await disconnect();
+  setAddress("")
+}
+
+  
+  // const getFunds=async()=>{
+  //   try {
+  //     const response=await fetch('api/getGoerli',{
+  //       method:'POST',
+  //       body:JSON.stringify({address}),
+  //       headers:{
+  //         'Content-Type':'application/json'
+  //       }
+  //     });
+  //     if(!response.ok)  
+  //     {return alert('Something went wrong in response ! ')}
+      
+  //     alert("Transaction initiated succesfully!") 
+      
+  //   } catch (err) {
+  //     console.error(err)
+  //     alert("Something went wrong in api! ")
+  //   }
+  // } 
+  
+  // const getValidation=async ()=>{
+  //          try {
+  //           const response=await fetch('api/getNftValidation',{
+  //             method:'POST',
+  //             body:JSON.stringify({address}),
+  //             headers:{
+  //               'Content-Type':'application/json'
+  //             }
+  //           });
+  //           if(!response.ok)  
+  //           { console.log(response)
+  //             return alert('Validation unsuccesful!!')}
+  //           else{
+  //             alert("Validation succesful!!")
+  //             getFunds()
+  //             }
+  //          } catch (err) {
+  //           console.error(err)
+  //          }
+  // }
 
   return (
     <div className={styles.container}>
@@ -62,10 +121,15 @@ export default function Home() {
           alignItems: "center",
           justifyContent: "center",
         }}>
-       <input type="text" value={address} onChange={(e)=>setAddress(e.target.value)} 
-       placeholder="Enter your wallet address"/>
-       <button onClick={getValidation}>Click to get Test Goerli</button>
+       <button onClick={() =>validate()}>Click to get Test Goerli</button>
+       <button onClick={()=>ConnectWallet()}>Connect Wallet</button>
+       <button onClick={()=>disconnet()}>Disconnect</button>
+       <br/>
+       <div>
+       <h3>Connected Wallet:{address}</h3>
+       </div>
     </div>
+   
      
     </div>
   )
