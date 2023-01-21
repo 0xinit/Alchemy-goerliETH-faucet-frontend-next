@@ -14,7 +14,7 @@ import { ethers } from "ethers";
 export default function Home() {
   const[address,setAddress]=useState("");
 
-  //Instead of using the Alchemy API here we directly call the Kudos procy contract to 
+  //Instead of using the Alchemy API here we directly call the Kudos proxy contract to 
   //check the balance of the users wallet for the token id ==2698 which is the early access token
   //by this method we can avoid the problem of stalling the application due to rate limit for the Alchemy API
   
