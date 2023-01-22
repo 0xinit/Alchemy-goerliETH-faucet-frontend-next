@@ -29,10 +29,10 @@ export default function Home() {
     ]);
     const tx=await provider.call({
       to: "0x60576A64851C5B42e8c57E3E4A5cF3CF4eEb2ED6", //Proxy contract deployed on Ploygon mainnet
-      data: callData
+      data: callData  // Calling the balanceOf() function of the contract on Polygon mainnet which gives the balance of the user's wallet which holds the Early access pass token(2698)
     });
     if(parseInt(tx)>0){
-      alert("You are eligible to get the Goerli ETH")
+      alert("You are eligible to get the Goerli ETH") //if the balance is greater than 0 then it is validated that the user has the early access token
     }else{
       alert("You don not have the NFT");
     }
