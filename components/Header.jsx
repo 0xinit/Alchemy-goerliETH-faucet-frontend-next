@@ -4,21 +4,21 @@ import React from "react"
 import Donate from "./Donate"
 const Header = () => {
     return (
-        <Flex justify="space-between" mb="5">
+        <Flex justify="space-between" alignItems="center" mb="5">
             <Flex alignItems="center">
                 <Image boxSize="50px" objectFit="cover" src="./logo.png" alt="AU Faucet" />
-                <Heading as="h3" size="lg" ml="3">
+                <Heading as="h3" size="lg" ml="4">
                     AU Faucet
                 </Heading>
             </Flex>
-            <Flex gap="5">
-                <Donate />
+            <Flex gap="10">
                 <ConnectButton
                     accountStatus={{
                         smallScreen: "avatar",
                         largeScreen: "full",
                     }}
                 />
+                <Donate />
             </Flex>
         </Flex>
     )

@@ -34,7 +34,9 @@ export default function Home() {
             <Box maxW="container.lg" mx="auto">
                 <Header />
                 {isValidAddress ? (
-                    <Form />
+                    <>
+                        <Form />
+                    </>
                 ) : (
                     <Box mt="32" textAlign="center">
                         <Heading color="blue.300" shadow="md" p="10">
