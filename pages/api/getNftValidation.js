@@ -1,38 +1,25 @@
-import { ethers } from "ethers"
+import { Network, Alchemy } from "alchemy-sdk"
 
+// Optional Config object, but defaults to demo api-key and eth-mainnet.
+const settings = {
+    apiKey: process.env.ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
+    network: Network.MATIC_MAINNET, // Replace with your network.
+}
 
-ethers.getDefaultProvider(process.env.ALCHEMY_URL)
-const ValidationCollection="0x60576A64851C5B42e8c57E3E4A5cF3CF4eEb2ED6"
-export default async function handler(req, res) {
-  try {
-   if(req.method!='POST'){
-    return res.status(400).json({message:"Please use post request"})
-   }
-   const walletAddress=req.body.address
-   var requestOptions = {
-    method: 'GET',
-    
-  };
-   const response=await fetch(`${process.env.ALCHEMY_NFT_URL}/getNFTs/
-   ?owner=${walletAddress}&contractAddresses%5B%5D=${ValidationCollection}`,requestOptions)
-   .then(data => data.json())
-   if(response.ownedNfts.length!=0){   
-    console.log("Nft titles mapped: ")
-    console.log("-----------------")
-    response.ownedNfts.map((nft)=>{
-      console.log("Title mapped: ",nft.title)
-      if(nft.title=='Alchemy University Early Access'){
-        console.log("Needed nft title for validation: ",nft.title)
-         return res.status(200).json({message:"Validation succesful!"})
-      }
-    })
-    
-   }else{
-    console.log("Validation failed: You'r not early access holder!")
-    res.status(400).json({message:"Validation unsuccesful!"})
-   }
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({message:"Internal Server Error!"})
-  }
+const alchemy = new Alchemy(settings)
+
+const nftCollection = "0x60576A64851C5B42e8c57E3E4A5cF3CF4eEb2ED6"
+
+export default async function getNftValidation(req, res) {
+    const walletAddress = req.body.address
+    const response = await alchemy.nft.verifyNftOwnership(walletAddress, nftCollection)
+    if (response) {
+        return res.status(200).json({
+            message: "Enjoy 0.0001 Goerli ETH",
+        })
+    } else {
+        return res.status(404).json({
+            message: "You don't have a Early Access NFT",
+        })
+    }
 }
