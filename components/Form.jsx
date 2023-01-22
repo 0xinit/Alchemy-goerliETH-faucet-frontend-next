@@ -4,23 +4,26 @@ import React, { useState } from "react"
 import Confetti from "react-confetti"
 import { toast } from "react-hot-toast"
 import { sendFund } from "../services"
+import { useWindowSize } from "react-use"
 
 const Form = () => {
     const [address, setAddress] = useState("")
     const [showSpinner, setShowSpinner] = useState(false)
     const [showConfetti, setShowConfetti] = useState(false)
+    const { width, height } = useWindowSize()
 
     const handleValidation = async (_address) => {
         const validAddress = ethers.utils.isAddress(_address)
         if (validAddress) {
             setShowSpinner(true)
-            try {
-                await sendFund(_address)
+            const res = await sendFund(_address)
+            if (res) {
                 setShowSpinner(false)
                 setShowConfetti(true)
                 setAddress("")
-            } catch (error) {
+            } else {
                 setShowSpinner(false)
+                setShowConfetti(false)
                 setAddress("")
             }
         } else {
@@ -57,7 +60,7 @@ const Form = () => {
                 Send Me 0.0001 ETH
             </Button>
 
-            {showConfetti && <Confetti />}
+            {showConfetti && <Confetti width={width} height={height} />}
         </Flex>
     )
 }

@@ -21,7 +21,6 @@ export const checkEarlyAccessNft = async (address) => {
 }
 
 export const sendFund = async (address) => {
-    console.log(address)
     toast("Request Initiated!", { icon: "🚀" })
     try {
         const response = await fetch("api/getGoerli", {
@@ -31,15 +30,15 @@ export const sendFund = async (address) => {
                 "Content-Type": "application/json",
             },
         })
-
-        if (response.status === 200) {
-            const data = await response.json()
-            toast.success(data.message, { duration: 100000 })
+        const data = await response.json()
+        if (response.status !== 200) {
+            toast.error(data.message)
+            return false
         } else {
-            toast.error("Something went wrong in api!")
+            toast.success(data.message, { duration: 100000 })
+            return true
         }
     } catch (err) {
-        console.error(err)
         toast.error("Something went wrong in api!")
     }
 }
