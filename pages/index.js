@@ -28,7 +28,7 @@ export default function Home() {
         <Box mt="10">
             <Head>
                 <title>AU Goerli Faucet</title>
-                <meta name="description" content="Goerlui faucet for AU students" />
+                <meta name="description" content="Goerli faucet for AU students" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Box maxW="container.lg" mx="auto">
@@ -37,7 +37,10 @@ export default function Home() {
                     <Form />
                 ) : (
                     <Box mt="32" textAlign="center">
-                        <Heading> Connect yout account that contains AU Early Access NFT </Heading>
+                        <Heading color="blue.300" shadow="md" p="10">
+                            {" "}
+                            Connect your account that contains AU Early Access NFT{" "}
+                        </Heading>
                     </Box>
                 )}
             </Box>

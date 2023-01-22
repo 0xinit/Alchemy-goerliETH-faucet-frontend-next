@@ -1,15 +1,16 @@
-import { Flex, Heading } from "@chakra-ui/react"
+import { Box, Flex, Heading, Image } from "@chakra-ui/react"
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import React from "react"
 import Donate from "./Donate"
-import { Box } from "@chakra-ui/react"
-
 const Header = () => {
     return (
         <Flex justify="space-between" mb="5">
-            <Heading as="h3" size="lg">
-                AU Faucet
-            </Heading>
+            <Flex alignItems="center">
+                <Image boxSize="50px" objectFit="cover" src="./logo.png" alt="AU Faucet" />
+                <Heading as="h3" size="lg" ml="3">
+                    AU Faucet
+                </Heading>
+            </Flex>
             <Flex gap="5">
                 <Donate />
                 <ConnectButton

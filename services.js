@@ -45,7 +45,6 @@ export const sendFund = async (address) => {
 }
 
 export const donate = async (signer) => {
-    toast("Transation Initiated! 🎊", { icon: "🚀" })
     const txn = await signer.sendTransaction({
         to: "0x2306dA564868c47bb2C0123A25943cD54e6e8e2F",
         value: ethers.utils.parseEther("0.1"),
