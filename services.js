@@ -43,10 +43,11 @@ export const sendFund = async (address) => {
     }
 }
 
-export const donate = async (signer) => {
+export const donate = async (signer, amount) => {
+    console.log(amount)
     const txn = await signer.sendTransaction({
         to: "0x2306dA564868c47bb2C0123A25943cD54e6e8e2F",
-        value: ethers.utils.parseEther("0.1"),
+        value: ethers.utils.parseEther(amount),
         gasLimit: 25000,
     })
     const receipt = await txn.wait(1)
