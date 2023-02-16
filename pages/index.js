@@ -11,6 +11,7 @@ import { getNetwork } from "@wagmi/core"
 export default function Home() {
     const [isValidAddress, setIsValidAddress] = useState(false)
     const { address } = useAccount()
+    console.log(isValidAddress)
 
     useEffect(() => {
         if (!address) return
@@ -18,6 +19,7 @@ export default function Home() {
             const _isValidAddress = await checkEarlyAccessNft(address)
             if (_isValidAddress) {
                 setIsValidAddress(true)
+                console.log(isValidAddress)
             } else {
                 setIsValidAddress(false)
             }
