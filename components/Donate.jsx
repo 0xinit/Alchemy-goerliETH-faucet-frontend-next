@@ -68,6 +68,7 @@ const Donate = () => {
                                     type="number"
                                     onChange={(e) => setEthToDonate(e.target.value)}
                                     placeholder="ETH"
+                                    value={ethToDonate}
                                 />
                             </FormControl>
                         </ModalBody>
